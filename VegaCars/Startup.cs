@@ -27,9 +27,6 @@ namespace VegaCars
         {
             services.AddAutoMapper();
           
-            var connectionString_ = Configuration.GetValue<string>("ConnectionStrings:Default");
-            Console.WriteLine($"Connection String: {connectionString_}");
-
             services.AddDbContext<VegaDbContext>(options =>
             {
                 var connectionString = Configuration.GetValue<string>("ConnectionStrings:Default");
