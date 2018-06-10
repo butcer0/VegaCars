@@ -1,0 +1,42 @@
+﻿<div class="container">
+    <div class="row mb-5">
+        <div class="col-sm-6 px-5">
+            <select>
+                <option *ngFor="let make of makes" value="{{make}}" (click)="makeSelected(make)" [selected]="(car.make === make)">{{make.name}}</option>
+            </select>
+        </div>
+        <div class="col-sm-6 px-5">
+            <select>
+                <option *ngFor="let model of car.make.models" value="{{model}}" [class.disabled]="!car.make.models" (click)="modelSelected(model)" [selected]="(car.model === model)">{{model.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 px-auto">
+            <input type="radio" value="yes" name="registered" class="mb-5 px-2" [(ngModel)]="car.isRegistered" (input)="changeRegistered()" >
+            <input type="radio" value="no" name="registered" class="mb-5 px-2" [(ngModel)]="car.isRegistered" (input)="changeRegistered()" >
+        </div> 
+    </div>
+    <div class="row">
+        <input type="checkbox" *ngFor="let feature of features" name="featureCheckbox" value="{{feature}}" >{{feature}}<br>        
+    </div>
+    <div class="row">
+        <section class="col-sm-6 col-md-4">
+            <h3>Name</h3>
+            <input type="text" placeholder="Name" class=" mb-5 px-2" [(ngModel)]="car.contactInfo.name" (input)="changeContactInfo()" />
+        </section>
+        <section class="col-sm-6 col-md-4">
+            <h3>Phone Number</h3>
+            <input type="text" placeholder="Name" class=" mb-5 px-2" [(ngModel)]="car.contactInfo.phone" (input)="changeContactInfo()" />
+        </section>
+        <section class="col-sm-6 col-md-4">
+            <h3>Email</h3>
+            <input type="text" placeholder="Name" class=" mb-5 px-2" [(ngModel)]="car.contactInfo.email" (input)="changeContactInfo()" />
+        </section>
+    </div>
+    <p class="m-10">
+        {{car | json}}
+    </p>
+    
+    <a routerLink="/car-details" class="btn btn-primary text-uppercase mb-2 px-5">Add Car</a>
+</div>

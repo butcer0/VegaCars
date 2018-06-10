@@ -30,6 +30,16 @@
     <Compile Remove="Migrations\20180610150100_InitialMigration.Designer.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="ClientApp\app\Models\Car.ts" />
+    <None Remove="ClientApp\app\Models\carOptions.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\Models\Car.ts" />
+    <TypeScriptCompile Include="ClientApp\app\Models\carOptions.ts" />
+  </ItemGroup>
+
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
