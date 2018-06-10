@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VegaCars.Persistence;
 
 namespace VegaCars
 {
@@ -22,6 +25,19 @@ namespace VegaCars
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper();
+          
+            var connectionString_ = Configuration.GetValue<string>("ConnectionStrings:Default");
+            Console.WriteLine($"Connection String: {connectionString_}");
+
+            services.AddDbContext<VegaDbContext>(options =>
+            {
+                var connectionString = Configuration.GetValue<string>("ConnectionStrings:Default");
+                options.UseSqlServer(connectionString);
+               
+                //options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Initial Catalog = VegaCars; Integrated Security = False; User ID = sa; Password = Password1; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = True; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
+
+            });
             services.AddMvc();
         }
 
