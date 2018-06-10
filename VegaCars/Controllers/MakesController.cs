@@ -37,5 +37,37 @@ namespace VegaCars.Controllers
             var features = await context.Features.ToListAsync();
             return mapper.Map<List<Feature>, List<FeatureResource>>(features);
         }
+
+        [HttpGet("/api/vehicles")]
+        public async Task<IEnumerable<VehicleResource>> GetVehicles()
+        {
+            var vehicles = await context.Vehicles.ToListAsync();
+            return mapper.Map<List<Vehicle>, List<VehicleResource>>(vehicles);
+        }
+
+        [HttpPost("/api/vehicle")]
+        public async Task<IActionResult> AddVehicle([FromBody] Vehicle newVehicle)
+        {
+            await context.Vehicles.AddAsync(newVehicle);
+            int updatedRows = await context.SaveChangesAsync();
+            return (updatedRows > 0) ? Ok() as StatusCodeResult : BadRequest() as StatusCodeResult;
+
+        }
+        [HttpPut("/api/vehicle")]
+        public async Task<IActionResult> UpdateVehicle([FromBody] Vehicle vehicle)
+        {
+            context.Vehicles.Update(vehicle);
+            int updatedRows = await context.SaveChangesAsync();
+            return (updatedRows > 0) ? Ok() as StatusCodeResult : BadRequest() as StatusCodeResult;
+
+        }
+
+        [HttpDelete("/api/vehicle")]
+        public async Task<IActionResult> DeleteVehicle([FromBody] Vehicle vehicle)
+        {
+            context.Vehicles.Remove(vehicle);
+            int deletedRows = await context.SaveChangesAsync();
+            return (deletedRows > 0) ? Ok() as StatusCodeResult : BadRequest() as StatusCodeResult;
+        }
     }
 }
