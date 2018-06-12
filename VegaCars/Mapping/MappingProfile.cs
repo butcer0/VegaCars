@@ -12,6 +12,7 @@ namespace VegaCars.Mapping
     {
         public MappingProfile()
         {
+            // Domain to API Resource
             CreateMap<Make, MakeResource>();
             CreateMap<Model, ModelResource>();
             CreateMap<Feature, FeatureResource>();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VegaCars.Controllers.Resources;
 using VegaCars.Models;
 using VegaCars.Persistence;
@@ -98,8 +99,17 @@ namespace VegaCars.Controllers
                 return BadRequest(ModelState);
             }
 
-            var vehicle = await context.Vehicles.FindAsync(id);
 
+            // Without including the features, unable to remove VehicleFeatures that are already present in table during mapping
+            var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+                
+            #region Depricated - Include Features to verify
+            //var vehicle = await context.Vehicles.FindAsync(id);
+            #endregion
             // Introduced the retrieved vehicle as the destination for the mapping
             mapper.Map<VehicleResource, Vehicle>(vehicleResource, vehicle);
             vehicle.LastUpdate = DateTime.Now;
@@ -110,6 +120,40 @@ namespace VegaCars.Controllers
 
             return Ok(result);
 
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVehicle(int id)
+        {
+            var vehicle = await context.Vehicles.FindAsync(id);
+
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+                
+            context.Remove(vehicle);
+            await context.SaveChangesAsync();
+
+            return Ok(vehicle);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetVehicle(int id)
+        {
+            var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            #region Depricated - Eager Load Features to be Included in Response
+            //var vehicle = await context.Vehicles.FindAsync(id);
+            #endregion
+
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+
+            var vehicleResource = mapper.Map<Vehicle, VehicleResource>(vehicle);
+
+            return Ok(vehicleResource);
         }
     }
 }
