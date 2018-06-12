@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VegaCars.Persistence;
+using VegaCars.Persistence.Interfaces;
 
 namespace VegaCars
 {
@@ -27,7 +28,7 @@ namespace VegaCars
         {
             services.AddAutoMapper();
           
-            services.AddDbContext<VegaDbContext>(options =>
+            services.AddDbContext<IVegaDbContext, VegaDbContext>(options =>
             {
                 var connectionString = Configuration.GetValue<string>("ConnectionStrings:Default");
                 options.UseSqlServer(connectionString);
@@ -35,6 +36,7 @@ namespace VegaCars
                 //options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Initial Catalog = VegaCars; Integrated Security = False; User ID = sa; Password = Password1; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = True; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
 
             });
+            
             services.AddMvc();
         }
 

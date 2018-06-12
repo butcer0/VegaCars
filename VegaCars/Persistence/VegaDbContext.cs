@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VegaCars.Models;
+using VegaCars.Persistence.Interfaces;
 
 namespace VegaCars.Persistence
 {
-    public class VegaDbContext : DbContext
+    public class VegaDbContext : DbContext, IVegaDbContext
     {
         public DbSet<Make> Makes { get; set; }
         public DbSet<Feature> Features { get; set; }

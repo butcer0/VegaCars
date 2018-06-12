@@ -13,10 +13,11 @@ namespace VegaCars.Mapping
         public MappingProfile()
         {
             // Domain to API Resource
-            CreateMap<Make, MakeResource>();
+            CreateMap<Make, ModelResource>();
+            CreateMap<Make, ModelResponseResource>();
             CreateMap<Model, ModelResource>();
             CreateMap<Feature, FeatureResource>();
-            CreateMap<Vehicle, VehicleResource>()
+            CreateMap<Vehicle, VehicleResponseResource>()
               .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
               .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => vf.FeatureId)));
 

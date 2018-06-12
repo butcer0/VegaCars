@@ -79,7 +79,7 @@ namespace VegaCars.Controllers
             context.Vehicles.Add(vehicle);
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var result = mapper.Map<Vehicle, VehicleResponseResource>(vehicle);
 
             return Ok(result);
 
@@ -116,7 +116,7 @@ namespace VegaCars.Controllers
 
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var result = mapper.Map<Vehicle, VehicleResponseResource>(vehicle);
 
             return Ok(result);
 
@@ -141,7 +141,11 @@ namespace VegaCars.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
-            var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await context.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .Include(v => v.Features)
+                .SingleOrDefaultAsync(v => v.Id == id);
             #region Depricated - Eager Load Features to be Included in Response
             //var vehicle = await context.Vehicles.FindAsync(id);
             #endregion
@@ -151,7 +155,7 @@ namespace VegaCars.Controllers
                 return NotFound();
             }
 
-            var vehicleResource = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var vehicleResource = mapper.Map<Vehicle, VehicleResponseResource>(vehicle);
 
             return Ok(vehicleResource);
         }
