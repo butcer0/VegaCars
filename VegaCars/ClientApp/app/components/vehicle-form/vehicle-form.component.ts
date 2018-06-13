@@ -116,7 +116,7 @@ export class VehicleFormComponent implements OnInit {
                 .subscribe(x => {
                     this.toastyService.success({
                         title: '',
-                        msg: "<div class='alert alert-info'><strong> 'Success <strong> The vehicle was successfully updated.'</div>",
+                        msg: "<div class='alert alert-success'><strong> Success! <strong> The vehicle was successfully updated.</div>",
                         theme: 'bootstrap',
                         showClose: true,
                         timeout: 5000
@@ -126,8 +126,15 @@ export class VehicleFormComponent implements OnInit {
         else {
             this.vehicleService.create(this.vehicle)
                 .subscribe(x => console.log(x));
-        }
+        }        
+    }
 
-        
+    delete() {
+        if (confirm("Are you sure?")) {
+            this.vehicleService.delete(this.vehicle.id)
+                .subscribe(x => {
+                    this.router.navigate(['/home']);
+                });
+        }
     }
 }

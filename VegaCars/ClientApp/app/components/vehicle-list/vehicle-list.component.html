@@ -1,0 +1,47 @@
+<h1>Vehicles</h1>
+<form>
+    <h3>Filter</h3>
+    <div class="form-group">
+        <label for="make">Make</label>
+        <select id="make" class="form-control" (change)="onMakeChange()" [(ngModel)]="makeId" name="makeId">
+            <option value=""></option>
+            <option *ngFor="let make of makes" value="{{make.id}}">{{make.name}}</option>
+        </select>
+    </div>
+    <div>
+        <p>
+            {{currentSortOption | json}}
+        </p>
+        <h2>Vehicles</h2>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th (click)="sort(_SortOptions.make)" class="clickableHeader">Make</th>
+                    <th (click)="sort(_SortOptions.model)" class="clickableHeader">Model</th>
+                    <th (click)="sort(_SortOptions.contactName)" class="clickableHeader">Contact Name</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let v of (vehiclesFiltered | sortVehicles: currentSortOption)">
+                    <td>{{v.id}}</td>
+                    <td>{{v.make.name}}</td>
+                    <td>{{v.model.name}}</td>
+                    <td>{{v.contact.name}}</td>
+                    <td>
+                        <button class="btn btn-primary" (click)="viewVehicle(v.id)">View</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="text-center">
+                <button class="btn btn-default" (click)="nextPage()">< Prev</button>
+                <button class="btn btn-default" (click)="prevPage()">Next ></button>
+            </div>
+        </div>
+    </div>
+</form>
