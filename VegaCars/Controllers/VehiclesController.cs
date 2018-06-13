@@ -26,7 +26,7 @@ namespace VegaCars.Controllers
         }
 
         [HttpPost]
-       public async Task<IActionResult> CreateVehicle([FromBody]VehicleResource vehicleResource)
+       public async Task<IActionResult> CreateVehicle([FromBody]SaveVehicleResource vehicleResource)
         {
             if(!ModelState.IsValid)
             {
@@ -73,13 +73,13 @@ namespace VegaCars.Controllers
             //}
             #endregion
 
-            var vehicle = mapper.Map<VehicleResource, Vehicle>(vehicleResource);
+            var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdate = DateTime.Now;
 
             context.Vehicles.Add(vehicle);
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
 
             return Ok(result);
 
@@ -92,7 +92,7 @@ namespace VegaCars.Controllers
         }
 
         [HttpPut("{id}")] // /api/vehicles/{id}
-        public async Task<IActionResult> UpdateVehicle(int id, [FromBody]VehicleResource vehicleResource)
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody]SaveVehicleResource vehicleResource)
         {
             if (!ModelState.IsValid)
             {
@@ -111,7 +111,7 @@ namespace VegaCars.Controllers
             //var vehicle = await context.Vehicles.FindAsync(id);
             #endregion
             // Introduced the retrieved vehicle as the destination for the mapping
-            mapper.Map<VehicleResource, Vehicle>(vehicleResource, vehicle);
+            mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
             vehicle.LastUpdate = DateTime.Now;
 
             await context.SaveChangesAsync();
