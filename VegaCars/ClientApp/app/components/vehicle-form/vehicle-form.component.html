@@ -50,5 +50,5 @@
         <input id="contactEmail" type="text" class="form-control" [(ngModel)]="vehicle.contact.email" name="contactEmail" required #contactEmail="ngModel" />
         <div class="alert alert-danger" *ngIf="contactEmail.touched && !contactEmail.valid">Please specify a contact email.</div>
     </div>
-    <button class="btn btn-primary" [disabled]="!f.valid">Save</button>
+    <button class="btn btn-primary" >Save</button>
 </form>
