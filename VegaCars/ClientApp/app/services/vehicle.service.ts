@@ -5,7 +5,7 @@ import { SaveVehicle } from '../models/SaveVehicle';
 
 @Injectable()
 export class VehicleService {
-
+    
     constructor(private http: Http) { }
 
     getMakes() {
@@ -32,7 +32,19 @@ export class VehicleService {
         return this.http.delete(`/api/vehicles/${id}`).map(res => res.json());
     }
 
-    getVehicles() {
-        return this.http.get('/api/vehicles').map(res => res.json());
+    getVehicles(filter: any) {
+        return this.http.get(`/api/vehicles?${this.toQueryString(filter)}`).map(res => res.json());
+    }
+
+    toQueryString(obj: any) {
+        var parts = [];
+        for (var property in obj) {
+            var value = obj[property];
+            if (value != null && value != undefined) {
+                parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+            }
+        }
+
+        return parts.join('&');
     }
 }
