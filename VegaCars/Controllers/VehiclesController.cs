@@ -17,15 +17,28 @@ namespace VegaCars.Controllers
     public class VehiclesController : Controller
     {
         private readonly IMapper mapper;
-        private readonly VegaDbContext context;
+        #region Depricated - Decouple with IUnitOfWork & IVehicleRepository
+        //private readonly VegaDbContext context;
+        #endregion
         private readonly IVehicleRepository repository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public VehiclesController(IMapper mapper, VegaDbContext context, IVehicleRepository repository)
+        public VehiclesController(IMapper mapper, IVehicleRepository repository, IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
-            this.context = context;
             this.repository = repository;
+            this.unitOfWork = unitOfWork;
         }
+
+        #region Depricated - Decoupled VegaDbContext with IUnitOfWork & IVehicleRepository
+        //public VehiclesController(IMapper mapper, VegaDbContext context, IVehicleRepository repository, IUnitOfWork unitOfWork)
+        //{
+        //    this.mapper = mapper;
+        //    this.context = context;
+        //    this.repository = repository;
+        //    this.unitOfWork = unitOfWork;
+        //}
+        #endregion
 
         [HttpPost]
        public async Task<IActionResult> CreateVehicle([FromBody]SaveVehicleResource vehicleResource)
@@ -75,8 +88,15 @@ namespace VegaCars.Controllers
             var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdate = DateTime.Now;
 
-            context.Vehicles.Add(vehicle);
-            await context.SaveChangesAsync();
+            repository.Add(vehicle);
+            await unitOfWork.CompleteAsync();
+
+            #region Depricated - Pass through Repository to Decouple
+            //context.Vehicles.Add(vehicle);
+            #endregion
+            #region Depricated - Moved to IUnitOfWork
+            //await context.SaveChangesAsync();
+            #endregion
 
             #region One way of including Eager loaded data for VehicleResource return
             //// Not necessary to return this to vehicle.Model -> once EF has loaded into context will update internally
@@ -124,9 +144,14 @@ namespace VegaCars.Controllers
             mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
             vehicle.LastUpdate = DateTime.Now;
 
-            await context.SaveChangesAsync();
+            await unitOfWork.CompleteAsync();
 
-         
+            #region Depricated - Moved to IUnitOfWork
+            //await context.SaveChangesAsync();
+            #endregion
+
+            // 'Rehydrate' after update so value is present
+            vehicle = await repository.GetVehicle(vehicle.Id);
             var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(result);
@@ -136,15 +161,25 @@ namespace VegaCars.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
-            var vehicle = await context.Vehicles.FindAsync(id);
+            var vehicle = await repository.GetVehicle(id, includeRelated: false);
+            #region Depricated - Use repository without 'full hydration'
+            //var vehicle = await context.Vehicles.FindAsync(id);
+            #endregion
 
             if (vehicle == null)
             {
                 return NotFound();
             }
-                
-            context.Remove(vehicle);
-            await context.SaveChangesAsync();
+
+            repository.Remove(vehicle);
+            await unitOfWork.CompleteAsync();
+
+            #region Depricated - Moved to Repository
+            //context.Remove(vehicle);
+            #endregion
+            #region Depricated - Moved to IUnitOfWork
+            //await context.SaveChangesAsync();
+            #endregion
 
             return Ok(vehicle);
         }
@@ -154,7 +189,6 @@ namespace VegaCars.Controllers
         {
             // Vehicle -> VehicleFeature -> Feature
             var vehicle = await repository.GetVehicle(id);
-
 
             #region Depricated - ThenIclude vehicle -> VehicleFeature -> Feature
             //var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
