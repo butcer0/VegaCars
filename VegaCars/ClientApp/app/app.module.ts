@@ -15,6 +15,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 import { VehicleService } from './services/vehicle.service';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { PaginationComponent } from './components/shared/pagination.component';
 //import { AppErrorHandler } from './components/app/app.error-handler';
 
 Raven
@@ -29,7 +30,8 @@ Raven
         FetchDataComponent,
         HomeComponent,
         VehicleFormComponent,
-        VehicleListComponent
+        VehicleListComponent,
+        PaginationComponent
     ],
     imports: [
         CommonModule,

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Vehicle } from '../../models/vehicle';
 import { VehicleService } from '../../services/vehicle.service';
 import { KeyValuePair } from '../../models/keyvaluepair';
+import { PaginationComponent } from '../shared/pagination.component'
 
 @Component({
   selector: 'app-vehicle-list',
@@ -9,9 +10,13 @@ import { KeyValuePair } from '../../models/keyvaluepair';
   styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
-    vehicles: Vehicle[];
+    private readonly PAGE_SIZE = 3;
+
+    queryResult: any = {};
     makes: KeyValuePair[];
-    query: any = {};
+    query: any = {
+        pageSize: this.PAGE_SIZE,
+    };
     columns = [
         { title: 'Id' },
         { title: 'Contact Name', key: 'contactName', isSortable: true },
@@ -29,16 +34,21 @@ export class VehicleListComponent implements OnInit {
 
     private populateVehicles() {
         this.vehicleService.getVehicles(this.query)
-            .subscribe(vehicles => this.vehicles = vehicles);
+            .subscribe(result => this.queryResult = result);
     }
 
     onFilterChange() {
+        this.query.page = 1;
         this.populateVehicles();
     }
 
     resetFilter() {
-        this.query = {};
-        this.onFilterChange();
+        this.query = {
+            page: 1,
+            pageSize: this.PAGE_SIZE
+        };
+        //this.onFilterChange();
+        this.populateVehicles();
     }
 
     sortBy(columnName: string) {
@@ -49,6 +59,11 @@ export class VehicleListComponent implements OnInit {
             this.query.sortBy = columnName;
             this.query.isSortAscending = true;
         }
+        this.populateVehicles();
+    }
+
+    onPageChanged(page: number) {
+        this.query.page = page;
         this.populateVehicles();
     }
 

@@ -22,6 +22,9 @@ namespace VegaCars.Persistence
         #region Depricated - Introduced includeRelated
         //public async Task<Vehicle> GetVehicle(int id)
         #endregion
+        #region Depricated - Updated for QueryResult<T>
+        //public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true)
+        #endregion
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true)
         {
             if (!includeRelated)
@@ -55,8 +58,10 @@ namespace VegaCars.Persistence
             context.Vehicles.Remove(vehicle);
         }
 
-        public async Task<IEnumerable<Vehicle>> GetVehicles(VehicleQuery queryObject)
+        public async Task<QueryResult<Vehicle>> GetVehicles(VehicleQuery queryObject)
         {
+            var result = new QueryResult<Vehicle>();
+
             var query = context.Vehicles
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
@@ -84,6 +89,13 @@ namespace VegaCars.Persistence
 
             query = query.ApplyingOrdering(queryObject, columnsMap);
 
+            result.TotalItems = await query.CountAsync();
+
+
+            query = query.ApplyPaging(queryObject);
+
+            result.Items = await query.ToListAsync();
+
             #region Depricated - Refactored with Dictionary
             //if(queryObject.SortBy == "make")
             //{
@@ -106,7 +118,7 @@ namespace VegaCars.Persistence
             //}
             #endregion
 
-            return await query.ToListAsync();
+            return result;
         }
 
        
