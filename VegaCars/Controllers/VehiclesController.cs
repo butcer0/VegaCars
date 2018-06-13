@@ -89,6 +89,7 @@ namespace VegaCars.Controllers
             //}
             #endregion
 
+
             var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdate = DateTime.Now;
 
