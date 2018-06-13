@@ -14,4 +14,12 @@ export class VehicleService {
     getFeatures() {
         return this.http.get('/api/features').map(res => res.json());
     }
+
+    getVehicle(id: number) {
+        return this.http.get(`/api/vehicles/${id}`).map(res => res.json());
+    }
+
+    deleteVehicle(id: number) {
+        return this.http.delete(`/api/vehicles/${id}`).map(res => res.json());
+    }
 }
