@@ -10,9 +10,9 @@ import { SaveVehicle } from '../../models/SaveVehicle';
 import { Vehicle } from '../../models/vehicle';
 
 @Component({
-  selector: 'app-vehicle-form',
-  templateUrl: './vehicle-form.component.html',
-  styleUrls: ['./vehicle-form.component.css']
+    selector: 'app-vehicle-form',
+    templateUrl: './vehicle-form.component.html',
+    styleUrls: ['./vehicle-form.component.css']
 })
 export class VehicleFormComponent implements OnInit {
     makes: any[] = [];
@@ -30,12 +30,12 @@ export class VehicleFormComponent implements OnInit {
             phone: ''
         }
     };
-   
+
 
     constructor(private route: ActivatedRoute,
-            private router: Router,
-            private vehicleService: VehicleService,
-            private toastyService: ToastyService) {
+        private router: Router,
+        private vehicleService: VehicleService,
+        private toastyService: ToastyService) {
 
         route.params.subscribe(p => {
             this.vehicle.id = +p['id'];
@@ -61,11 +61,11 @@ export class VehicleFormComponent implements OnInit {
                 this.setVehicle(data[2]);
                 this.populateModels();
             }
-            }, err => {
-                if (err.status == 404) {
-                    this.router.navigate(['/home']);
-                }
-            });
+        }, err => {
+            if (err.status == 404) {
+                this.router.navigate(['/home']);
+            }
+        });
 
         //this.vehicleService.getVehicle(this.vehicle.id)
         //    .subscribe(v => { this.vehicle = v },
@@ -77,7 +77,7 @@ export class VehicleFormComponent implements OnInit {
 
         //this.vehicleService.getMakes().subscribe(makes => this.makes = makes);
         //this.vehicleService.getFeatures().subscribe(features => this.features = features);
-        
+
     }
 
     private setVehicle(v: Vehicle) {
@@ -107,7 +107,7 @@ export class VehicleFormComponent implements OnInit {
         } else {
             let index = this.vehicle.features.indexOf(featureId);
             this.vehicle.features.splice(index, 1);
-        }       
+        }
     }
 
     submit() {
@@ -116,7 +116,7 @@ export class VehicleFormComponent implements OnInit {
                 .subscribe(x => {
                     this.toastyService.success({
                         title: '',
-                        msg: "<div class='alert alert-info'><strong> 'Success <strong> The vehicle was successfully updated.'</div>",
+                        msg: "<div class='alert alert-success'><strong> Success! <strong> The vehicle was successfully updated.</div>",
                         theme: 'bootstrap',
                         showClose: true,
                         timeout: 5000
@@ -127,7 +127,14 @@ export class VehicleFormComponent implements OnInit {
             this.vehicleService.create(this.vehicle)
                 .subscribe(x => console.log(x));
         }
+    }
 
-        
+    delete() {
+        if (confirm("Are you sure?")) {
+            this.vehicleService.delete(this.vehicle.id)
+                .subscribe(x => {
+                    this.router.navigate(['/home']);
+                });
+        }
     }
 }
