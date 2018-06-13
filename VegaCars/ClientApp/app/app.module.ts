@@ -28,7 +28,7 @@ import { AppErrorHandler } from './components/app/app.error-handler';
         CommonModule,
         HttpModule,
         FormsModule,
-        ToastyModule.forRoot(),
+        ToastyModule.forRoot(), 
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
