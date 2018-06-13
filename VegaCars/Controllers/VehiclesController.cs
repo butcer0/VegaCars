@@ -6,8 +6,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VegaCars.Controllers.Resources;
-using VegaCars.Models;
-using VegaCars.Persistence;
+using VegaCars.Core;
+using VegaCars.Core.Models;
+
+#region Depricated - Removed Low-level Dependency
+//using VegaCars.Persistence;
+#endregion
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

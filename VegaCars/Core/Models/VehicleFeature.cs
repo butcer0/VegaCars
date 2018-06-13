@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using VegaCars.Core.Models;
 
-namespace VegaCars.Models
+namespace VegaCars.Core.Models
 {
     [Table("VehicleFeatures")]
     public class VehicleFeature

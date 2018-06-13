@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VegaCars.Controllers.Resources;
-using VegaCars.Models;
+using VegaCars.Core.Models;
 using VegaCars.Persistence;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

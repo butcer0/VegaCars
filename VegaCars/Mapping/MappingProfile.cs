@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VegaCars.Controllers.Resources;
-using VegaCars.Models;
+using VegaCars.Core.Models;
 
 namespace VegaCars.Mapping
 {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VegaCars.Models;
+using VegaCars.Core.Models;
 
 namespace VegaCars.Persistence
 {

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using VegaCars.Core;
 
 namespace VegaCars.Persistence
 {
