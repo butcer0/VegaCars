@@ -9,11 +9,6 @@
         </select>
     </div>
     <div>
-        <p>
-            {{ makeId | json }}
-            {{currentSortOption | json}}
-            {{ currentPage | json }}
-        </p>
         <h2>Vehicles</h2>
         <table class="table table-hover table-bordered">
             <thead>
@@ -42,11 +37,10 @@
         <div class="row">
             <div class="text-center">
                 <button class="btn btn-default" (click)="prevPage()" [disabled]="currentPage <= 0">< Prev</button>
+                <strong>  {{currentPage}} </strong>
                 <button class="btn btn-default" (click)="nextPage()">Next ></button>
             </div>
         </div>
     </div>
-    <p>
-        {{vehicles | json}}
-    </p>
+    
 </form>
