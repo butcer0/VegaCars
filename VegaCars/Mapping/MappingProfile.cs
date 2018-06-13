@@ -44,7 +44,7 @@ namespace VegaCars.Mapping
                  foreach (var f in addedFeatures)
                      v.Features.Add(f);
              });
-            CreateMap<VehicleResource, Filter>();
+            CreateMap<VehicleResource, VehicleQuery>();
             #region Depricated - Rewritten with Lambda
             //CreateMap<VehicleResource, Vehicle>()
             // .ForMember(v => v.Id, opt => opt.Ignore())
