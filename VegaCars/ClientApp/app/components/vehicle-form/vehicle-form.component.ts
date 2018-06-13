@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../../services/vehicle.service';
 import { Event } from '@angular/router/src/events';
@@ -5,6 +6,8 @@ import { ToastyService } from 'ng2-toasty';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/Observable/forkJoin';
+import { SaveVehicle } from '../../models/SaveVehicle';
+import { Vehicle } from '../../models/vehicle';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -14,11 +17,20 @@ import 'rxjs/add/Observable/forkJoin';
 export class VehicleFormComponent implements OnInit {
     makes: any[] = [];
     models: any[] = [];
-    vehicle: any = {
-        features: [],
-        contact: {}
-    };
     features: any[] = [];
+    vehicle: SaveVehicle = {
+        id: 0,
+        makeId: 0,
+        modelId: 0,
+        isRegistered: false,
+        features: [],
+        contact: {
+            name: '',
+            email: '',
+            phone: ''
+        }
+    };
+   
 
     constructor(private route: ActivatedRoute,
             private router: Router,
@@ -45,7 +57,8 @@ export class VehicleFormComponent implements OnInit {
             this.makes = data[0];
             this.features = data[1];
             if (this.vehicle.id) {
-                this.vehicle = data[2];
+
+                this.setVehicle(data[2]);
             }
             }, err => {
                 if (err.status == 404) {
@@ -64,6 +77,15 @@ export class VehicleFormComponent implements OnInit {
         //this.vehicleService.getMakes().subscribe(makes => this.makes = makes);
         //this.vehicleService.getFeatures().subscribe(features => this.features = features);
         
+    }
+
+    private setVehicle(v: Vehicle) {
+        this.vehicle.id = v.id;
+        this.vehicle.makeId = v.make.id;
+        this.vehicle.modelId = v.model.id;
+        this.vehicle.isRegistered = v.isRegistered;
+        this.vehicle.contact = v.contact;
+        this.vehicle.features = _.pluck(v.features, 'id');
     }
 
     onMakeChange() {
