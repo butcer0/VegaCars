@@ -18,11 +18,13 @@ namespace VegaCars.Controllers
     {
         private readonly IMapper mapper;
         private readonly VegaDbContext context;
+        private readonly IVehicleRepository repository;
 
-        public VehiclesController(IMapper mapper, VegaDbContext context)
+        public VehiclesController(IMapper mapper, VegaDbContext context, IVehicleRepository repository)
         {
             this.mapper = mapper;
             this.context = context;
+            this.repository = repository;
         }
 
         [HttpPost]
@@ -32,9 +34,6 @@ namespace VegaCars.Controllers
             {
                 return BadRequest(ModelState); 
             }
-
-
-
 
             #region Unnecessary ModelId, FeatureId Validation - comes from drop-down in client
             //var model = await context.Models.FindAsync(vehicleResource.ModelId);
@@ -79,7 +78,15 @@ namespace VegaCars.Controllers
             context.Vehicles.Add(vehicle);
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+            #region One way of including Eager loaded data for VehicleResource return
+            //// Not necessary to return this to vehicle.Model -> once EF has loaded into context will update internally
+            //await context.Models.Include(m => m.Make).SingleOrDefaultAsync(m => m.Id == vehicle.ModelId);
+            #endregion
+
+            // Fetch complete vehicle object - reset object ("rehydrate")
+            vehicle = await repository.GetVehicle(vehicle.Id);
+
+            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(result);
 
@@ -100,8 +107,11 @@ namespace VegaCars.Controllers
             }
 
 
+            // Fetch complete vehicle object - reset object ("rehydrate")
+            var vehicle = await repository.GetVehicle(id);
+
             // Without including the features, unable to remove VehicleFeatures that are already present in table during mapping
-            var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            //var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -116,7 +126,8 @@ namespace VegaCars.Controllers
 
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+         
+            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(result);
 
@@ -142,12 +153,7 @@ namespace VegaCars.Controllers
         public async Task<IActionResult> GetVehicle(int id)
         {
             // Vehicle -> VehicleFeature -> Feature
-            var vehicle = await context.Vehicles
-                .Include(v => v.Features)
-                    .ThenInclude(vf => vf.Feature)
-                .Include(v => v.Model)
-                    .ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await repository.GetVehicle(id);
 
 
             #region Depricated - ThenIclude vehicle -> VehicleFeature -> Feature

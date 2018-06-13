@@ -25,8 +25,10 @@ namespace VegaCars
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+
             services.AddAutoMapper();
-          
+            
             services.AddDbContext<VegaDbContext>(options =>
             {
                 var connectionString = Configuration.GetValue<string>("ConnectionStrings:Default");
@@ -35,6 +37,7 @@ namespace VegaCars
                 //options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Initial Catalog = VegaCars; Integrated Security = False; User ID = sa; Password = Password1; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = True; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
 
             });
+
             services.AddMvc();
         }
 
