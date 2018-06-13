@@ -116,7 +116,7 @@ namespace VegaCars.Controllers
 
             await context.SaveChangesAsync();
 
-            var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
 
             return Ok(result);
 
