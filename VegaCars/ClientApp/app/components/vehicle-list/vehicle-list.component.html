@@ -3,14 +3,16 @@
     <h3>Filter</h3>
     <div class="form-group">
         <label for="make">Make</label>
-        <select id="make" class="form-control" (change)="onMakeChange()" [(ngModel)]="makeId" name="makeId">
-            <option value=""></option>
+        <select id="make" class="form-control" [(ngModel)]="makeId" name="makeId">
+            <option value=-1></option>
             <option *ngFor="let make of makes" value="{{make.id}}">{{make.name}}</option>
         </select>
     </div>
     <div>
         <p>
+            {{ makeId | json }}
             {{currentSortOption | json}}
+            {{ currentPage | json }}
         </p>
         <h2>Vehicles</h2>
         <table class="table table-hover table-bordered">
@@ -24,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let v of (vehiclesFiltered | sortVehicles: currentSortOption)">
+                <tr *ngFor="let v of (vehicles | filterVehiclesMake: makeId | sortVehicles: currentSortOption)">
                     <td>{{v.id}}</td>
                     <td>{{v.make.name}}</td>
                     <td>{{v.model.name}}</td>
@@ -39,9 +41,12 @@
     <div class="container">
         <div class="row">
             <div class="text-center">
-                <button class="btn btn-default" (click)="nextPage()">< Prev</button>
-                <button class="btn btn-default" (click)="prevPage()">Next ></button>
+                <button class="btn btn-default" (click)="prevPage()" [disabled]="currentPage <= 0">< Prev</button>
+                <button class="btn btn-default" (click)="nextPage()">Next ></button>
             </div>
         </div>
     </div>
+    <p>
+        {{vehicles | json}}
+    </p>
 </form>

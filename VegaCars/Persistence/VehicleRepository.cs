@@ -53,5 +53,13 @@ namespace VegaCars.Persistence
             context.Vehicles.Remove(vehicle);
         }
 
+        public async Task<Vehicle[]> GetVehiclesAsync(int page, int itemsPerPage = 3)
+        {
+            return await context.Vehicles.Skip(itemsPerPage * page)
+                            .Take(itemsPerPage)
+                            .Include(v => v.Model)
+                                .ThenInclude(m => m.Make)
+                            .ToArrayAsync();
+        }
     }
 }

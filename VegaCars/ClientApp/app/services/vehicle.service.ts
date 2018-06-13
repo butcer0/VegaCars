@@ -32,7 +32,7 @@ export class VehicleService {
         return this.http.delete(`/api/vehicles/${id}`).map(res => res.json());
     }
 
-    getVehicles(page: number = 0) {
-        return this.http.get(`/api/vehicles/${page}`).map(res => res.json());
+    getVehicles(page: number = 0, itemsPerPage: number = 3) {
+        return this.http.get(`/api/vehicles/${page}/${itemsPerPage}`).map(res => res.json());
     }
 }

@@ -16,6 +16,7 @@ import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.com
 import { VehicleService } from './services/vehicle.service';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { SortVehiclesPipe } from './pipes/sort-vehicles.pipe';
+import { FilterVehiclesMakePipe } from './pipes/filter-vehicles-make.pipe';
 //import { AppErrorHandler } from './components/app/app.error-handler';
 
 Raven
@@ -31,7 +32,8 @@ Raven
         HomeComponent,
         VehicleFormComponent,
         VehicleListComponent,
-        SortVehiclesPipe
+        SortVehiclesPipe,
+        FilterVehiclesMakePipe
     ],
     imports: [
         CommonModule,
@@ -40,13 +42,13 @@ Raven
         ToastyModule.forRoot(), 
         RouterModule.forRoot([
             { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
-            { path: 'vehicles', component: VehicleListComponent },
+            { path: 'vehicles', component: VehicleListComponent, pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'vehicles/new', component: VehicleFormComponent },
             { path: 'vehicles/:id', component: VehicleFormComponent },
-            { path: '**', redirectTo: 'home' }
+            { path: '**', redirectTo: 'vehicles' }
         ]),
     ],
     providers: [

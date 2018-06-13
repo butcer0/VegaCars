@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using VegaCars.Core.Models;
 
 namespace VegaCars.Core
@@ -7,6 +8,7 @@ namespace VegaCars.Core
     {
 
         Task<Vehicle> GetVehicle(int id, bool includeRelated = true);
+        Task<Vehicle[]> GetVehiclesAsync(int page, int itemsPerPage = 3);
 
         void Add(Vehicle vehicle);
         void Remove(Vehicle vehicle);

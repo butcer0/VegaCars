@@ -16,7 +16,6 @@ import { SortVehiclesPipe } from '../../pipes/sort-vehicles.pipe';
 export class VehicleListComponent implements OnInit {
     makes: any[] = [];
     vehicles: Vehicle[] = [];
-    vehiclesFiltered: Vehicle[] = [];
     makeId: number = 0;
     currentPage: number = 0;
     currentSortOption: SortOptions = SortOptions.none;
@@ -29,12 +28,12 @@ export class VehicleListComponent implements OnInit {
   ngOnInit() {
       let sources = [
           this.vehicleService.getMakes(),
-          //this.vehicleService.getVehicles()
+          this.vehicleService.getVehicles()
       ];
 
       Observable.forkJoin(sources).subscribe(data => {
           this.makes = data[0];
-          //this.vehicles = data[1];
+          this.vehicles = data[1];
       }, err => {
           if (err.status == 404) {
               //this.router.navigate(['/home']);
@@ -43,22 +42,15 @@ export class VehicleListComponent implements OnInit {
 
   }
 
-    onMakeChange() {
-        if (this.makeId) {
-            this.vehiclesFiltered = this.vehicles.filter(v => v.make.id === this.makeId);
-        } else {
-            this.vehiclesFiltered = this.vehicles;
-        }
-        
-    }
-
     nextPage() {
+        this.makeId = 0;
         this.currentPage++;
         this.vehicleService.getVehicles(this.currentPage).subscribe(v => this.vehicles = v);
         
     }
 
     prevPage() {
+        this.makeId = 0;
         this.currentPage--;
         this.vehicleService.getVehicles(this.currentPage).subscribe(v => this.vehicles = v);
     }

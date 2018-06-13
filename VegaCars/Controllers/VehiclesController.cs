@@ -212,5 +212,22 @@ namespace VegaCars.Controllers
 
             return Ok(vehicleResource);
         }
+
+        [HttpGet("{page}/{itemsPerPage}")]
+        public async Task<IActionResult> GetVehicles(int page, int itemsPerPage)
+        {
+
+            // Vehicle -> VehicleFeature -> Feature
+            var vehicles = await repository.GetVehiclesAsync(page);
+
+            if (vehicles == null)
+            {
+                return NotFound();
+            }
+
+            var vehicleResources = mapper.Map<Vehicle[], VehicleResource[]>(vehicles);
+
+            return Ok(vehicleResources);
+        }
     }
 }
