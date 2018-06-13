@@ -48,6 +48,7 @@ namespace VegaCars
                 {
                     HotModuleReplacement = true
                 });
+                app.UseBrowserLink();
             }
             else
             {

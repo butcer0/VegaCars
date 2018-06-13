@@ -141,7 +141,18 @@ namespace VegaCars.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
-            var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            // Vehicle -> VehicleFeature -> Feature
+            var vehicle = await context.Vehicles
+                .Include(v => v.Features)
+                    .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(v => v.Id == id);
+
+
+            #region Depricated - ThenIclude vehicle -> VehicleFeature -> Feature
+            //var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            #endregion
             #region Depricated - Eager Load Features to be Included in Response
             //var vehicle = await context.Vehicles.FindAsync(id);
             #endregion
