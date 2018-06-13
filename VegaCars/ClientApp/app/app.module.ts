@@ -1,3 +1,4 @@
+import * as Raven from 'raven-js';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -13,7 +14,11 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 import { VehicleService } from './services/vehicle.service';
-import { AppErrorHandler } from './components/app/app.error-handler';
+//import { AppErrorHandler } from './components/app/app.error-handler';
+
+Raven
+    .config('https://13b103ce9a1640759b1a0c77d517cb62@sentry.io/1225395')
+    .install();
 
 @NgModule({
     declarations: [
@@ -35,11 +40,12 @@ import { AppErrorHandler } from './components/app/app.error-handler';
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'vehicles/new', component: VehicleFormComponent },
+            { path: 'vehicles/:id', component: VehicleFormComponent },
             { path: '**', redirectTo: 'home' }
         ]),
     ],
     providers: [
-        { provide: ErrorHandler, useClass: AppErrorHandler},
+        //{ provide: ErrorHandler, useClass: AppErrorHandler},
         VehicleService
     ]
 })
