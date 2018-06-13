@@ -34,4 +34,8 @@ export class VehicleListComponent implements OnInit {
         this.filter = {};
         this.onFilterChange();
     }
+
+    viewVehicle(id: number) {
+        
+    }
 }

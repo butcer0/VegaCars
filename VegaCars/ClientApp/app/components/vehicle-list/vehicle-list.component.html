@@ -29,7 +29,7 @@
             <td>{{ vehicle.make.name }}</td>
             <td>{{ vehicle.model.name }}</td>
             <td>{{ vehicle.contact.name }}</td>
-            <td></td>
+            <td><a [routerLink]="[('/vehicles/'+vehicle.id)]" class="btn-link">View</a></td>
         </tr>
     </tbody>
 </table>
